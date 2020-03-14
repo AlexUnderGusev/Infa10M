@@ -1,0 +1,61 @@
+#include <iostream>
+using namespace std;
+struct node 
+{
+	int key;
+	unsigned char height;
+	node* left;
+	node* right;
+	node(int k) { key = k; left = right = 0; height = 1; }
+};
+unsigned char height(node* p)
+{
+	return p ? p->height : 0;
+}
+int ballance_factor(node* p)
+{
+	return height(p->right) - height(p->left);
+}
+void fix_height(node* p)
+{
+	unsigned char hl = height(p->left);
+	unsigned char hr = height(p->right);
+	p->height = (hl > hr ? hl : hr) + 1;
+}
+node* rotateright(node* p) // МПП
+{
+	node* q = p->left;
+	p->left = q->right;
+	q->right = p;
+	fix_height(p);
+	fix_height(q);
+	return q;
+}
+node* rotateleft(node* q) // МЛП
+{
+	node* p = q->right;
+	q->right = p->left;
+	p->left = q;
+	fix_height(q);
+	fix_height(p);
+	return p;
+}
+node* balance(node* p) // балланс узла
+{
+	fix_height(p);
+	if (ballance_factor(p) == 2)
+	{
+		if (ballance_factor(p->right) < 0)
+			p->right = rotateright(p->right);
+		return rotateleft(p);
+	}
+	if (ballance_factor(p) == -2)
+	{
+		if (ballance_factor(p->left) > 0)
+			p->left = rotateleft(p->left);
+		return rotateright(p);
+	}
+	return p;
+}
+//пример не стал делать, узнал от одноклассников, 
+//что просто ballance написать, как теорию.

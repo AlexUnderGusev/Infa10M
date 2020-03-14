@@ -1,0 +1,89 @@
+#include <iostream>
+using namespace std;
+struct Node 
+{
+	int data; 
+	Node* next;
+};
+struct Queue 
+{
+	int size;
+	Node* first; 
+	Node* last; 
+};
+int size(Queue* Q)
+{
+	return Q->size;
+}
+void add(Queue* Q)
+{
+	int value;
+	cin >> value;
+	Q->last->next = new Node;
+	Q->last = Q->last->next;
+	Q->last->data = value;
+	Q->last->next = NULL;
+	Q->size++;
+}
+void creation(Queue* Q)
+{
+	Q->first = new Node;
+	Q->first->next = NULL;
+	Q->last = Q->first;
+	Q->size = 0;
+}
+bool full(Queue* Q)
+{
+	if (Q->first == Q->last) return true;
+	else return false;
+}
+int top(Queue* Q)
+{
+	return Q->first->next->data;
+}
+void del(Queue* Q)
+{
+	Q->first = Q->first->next;
+	Q->size--;
+}
+int main()
+{
+	setlocale(LC_ALL, "0");
+	Queue Q;
+	creation(&Q);
+	char number;
+	while (number != '0')
+	{
+		cout << "1 - add element" << endl;
+		cout << "2 - erase element" << endl;
+		cout << "3 - out last element" << endl;
+		cout << "4 - find out the element" << endl;
+	 cin >> number;
+		switch (number)
+		{
+		case '1': add(&Q);
+			break;
+		case '2':
+			if (full(&Q)) cout << endl << "empty";
+			else del(&Q);
+			break;
+
+		case '3':
+			if (full(&Q)) cout << endl << "empty";
+			else 
+			{ 
+				cout << top(&Q) << endl; 
+			}
+			break;
+		case '4':
+			if (full(&Q)) cout << endl << "empty";
+			else cout << size(&Q) << endl;
+			break;
+			
+		case '0': break;
+		default: cout << endl << "error";
+			break;
+		}
+	} 
+	return 0;
+}
